@@ -1,0 +1,30 @@
+<resources>
+
+    <color name="dark_bg">#0F1115</color>
+    <color name="camera_overlay">#B3000000</color>
+
+    <color name="electric">#00BCD4</color>
+    <color name="electric_dim">#3300BCD4</color>
+
+    <color name="mint">#4CAF50</color>
+    <color name="amber">#FFC107</color>
+
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_muted">#80FFFFFF</color>
+
+    <color name="border">#2A2D33</color>
+    <color name="surface">#1A1D22</color>
+
+    <color name="success">#4CAF50</color>
+    <color name="success_dim">#334CAF50</color>
+
+    <color name="danger">#F44336</color>
+    <color name="danger_dim">#33F44336</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="id_guide_stroke">#00BCD4</color>
+    <color name="oval_guide_stroke">#00BCD4</color>
+
+</resources>

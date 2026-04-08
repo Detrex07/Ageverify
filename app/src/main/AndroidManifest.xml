@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Camera for liveness check and ID scan -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- For reading DOB from ID photo in gallery (optional flow) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!--
+        BRIDGE PERMISSION DECLARATION
+        ─────────────────────────────
+        The standalone app defines this custom permission.
+        Partner apps must declare <uses-permission> for this to query the
+        Content Provider. Android OS enforces this before our code runs.
+
+        protectionLevel="dangerous" means the user sees a runtime permission
+        prompt when a partner app first requests it — giving users visibility
+        into which apps are querying their age credential.
+    -->
+    <permission
+        android:name="com.ageverify.permission.READ_TOKEN"
+        android:label="Read age verification status"
+        android:description="@string/permission_read_token_description"
+        android:protectionLevel="dangerous" />
+
+    <!--
+        The standalone app also uses its own permission (self-query for testing).
+    -->
+    <uses-permission android:name="com.ageverify.permission.READ_TOKEN" />
+
+    <!-- Network - intentionally NOT requested. All processing is on-device. -->
+
+    <uses-feature android:name="android.hardware.camera.front" android:required="true" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="AgeVerify"
+        android:roundIcon="@drawable/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AgeVerify">
+
+        <!-- ── Activities ──────────────────────────────────────── -->
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+                Deep-link intent filter — partner apps trigger this when
+                the standalone app is installed. The SDK sends
+                ACTION_VERIFY_IN_STANDALONE which lands here.
+            -->
+            <intent-filter>
+                <action android:name="com.ageverify.action.VERIFY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.LivenessActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.IDScanActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.ResultActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- ── Content Provider Bridge ────────────────────────── -->
+
+        <!--
+            AgeVerifyContentProvider
+            ────────────────────────
+            android:exported="true"         → visible to partner apps
+            android:readPermission          → enforced by Android OS before
+                                              our code runs — only apps that
+                                              declared READ_TOKEN permission
+                                              and received user approval can
+                                              query this provider
+            android:writePermission         → write is blocked entirely
+                                              (we set it to a permission no
+                                              app should have)
+            android:grantUriPermissions     → false — we do not grant
+                                              temporary URI permissions,
+                                              only the declared permission works
+        -->
+        <provider
+            android:name=".core.AgeVerifyContentProvider"
+            android:authorities="com.ageverify.provider"
+            android:exported="true"
+            android:readPermission="com.ageverify.permission.READ_TOKEN"
+            android:writePermission="com.ageverify.permission.WRITE_TOKEN_BLOCKED"
+            android:grantUriPermissions="false" />
+
+    </application>
+
+</manifest>

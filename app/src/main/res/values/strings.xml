@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AgeVerify</string>
+
+    <!-- Permission -->
+    <string name="permission_read_token_description">Allows this app to check your age verification status</string>
+
+    <!-- Main / Welcome -->
+    <string name="main_tagline">Age verified.\nPrivacy protected.</string>
+    <string name="main_subtitle">On-device verification. No data leaves your phone.</string>
+    <string name="main_already_verified">Already verified</string>
+    <string name="main_btn_start">Start Verification</string>
+    <string name="main_btn_reverify">Re-verify Identity</string>
+    <string name="main_verified_badge">Verified</string>
+    <string name="main_valid_until">Valid until %1$s</string>
+    <string name="main_jurisdiction">Jurisdiction: %1$s</string>
+    <string name="main_age_confirmed">Age %1$d+ confirmed</string>
+    <string name="main_privacy_note">Your ID and face are processed locally.\nNothing is stored or transmitted.</string>
+    <string name="main_steps_title">Three steps. One token.</string>
+    <string name="main_step_1">Liveness check</string>
+    <string name="main_step_2">ID scan</string>
+    <string name="main_step_3">Face match</string>
+
+    <!-- Liveness -->
+    <string name="liveness_title">Face Check</string>
+    <string name="liveness_position">Position your face in the oval</string>
+    <string name="liveness_no_face">No face detected</string>
+    <string name="liveness_multiple_faces">One person at a time</string>
+    <string name="liveness_challenge_prefix">Now:</string>
+    <string name="liveness_progress">%1$d of %2$d</string>
+    <string name="liveness_success">&#10003; Liveness confirmed</string>
+    <string name="liveness_timeout">Time\'s up — tap to retry</string>
+    <string name="liveness_retry">Retry</string>
+    <string name="liveness_tip">Make sure your face is well-lit and look directly at the camera</string>
+
+    <!-- ID Scan -->
+    <string name="id_scan_title">Scan Your ID</string>
+    <string name="id_scan_instruction">Place your ID inside the frame</string>
+    <string name="id_scan_tip">Make sure the date of birth is clearly visible</string>
+    <string name="id_scan_capture">Capture</string>
+    <string name="id_scan_processing">Reading ID…</string>
+    <string name="id_scan_no_dob">Date of birth not found — try again</string>
+    <string name="id_scan_retry">Retry</string>
+    <string name="id_scan_supported">Supports any government ID with a visible date of birth</string>
+
+    <!-- Result -->
+    <string name="result_success_title">Identity Verified</string>
+    <string name="result_success_subtitle">Your age credential is secured on this device.</string>
+    <string name="result_already_title">Already Verified</string>
+    <string name="result_already_subtitle">Your credential is still valid.</string>
+    <string name="result_fail_age_title">Age Requirement Not Met</string>
+    <string name="result_fail_age_subtitle">Access to this content requires a minimum age of %1$d.</string>
+    <string name="result_error_title">Verification Failed</string>
+    <string name="result_error_subtitle">Something went wrong. Please try again.</string>
+    <string name="result_token_label">Credential</string>
+    <string name="result_expires_label">Valid until</string>
+    <string name="result_jurisdiction_label">Jurisdiction</string>
+    <string name="result_age_label">Age confirmed</string>
+    <string name="result_done">Done</string>
+    <string name="result_retry">Try Again</string>
+    <string name="result_privacy_note">No personal data is stored.\nThis device holds only a signed credential.</string>
+
+    <!-- Errors -->
+    <string name="error_camera_permission">Camera access is required for age verification</string>
+    <string name="error_face_match">Face does not match the ID photo (%1$d%% match — needs 80%%)</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+</resources>

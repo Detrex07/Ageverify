@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Oval guide overlay for liveness screen.
+    The oval is drawn as a shape; the camera preview shows through the centre.
+    Animated stroke to give a "scanning" feel.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <stroke
+        android:width="2dp"
+        android:color="@color/oval_guide_stroke" />
+    <solid android:color="@color/transparent" />
+</shape>
