@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import com.ageverify.config.Jurisdiction
 import com.ageverify.core.AgeVerificationEngine
-import com.ageverify.ui.MainActivity
 
 /**
  * AgeVerify Partner SDK
@@ -102,7 +101,8 @@ class AgeVerifySDK(
         jurisdiction: Jurisdiction,
         requireFaceMatch: Boolean
     ) {
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent().apply {
+            setClassName(context.packageName, "com.ageverify.ui.MainActivity")
             putExtra(EXTRA_JURISDICTION_CODE, jurisdiction.countryCode)
             putExtra(EXTRA_MIN_AGE, jurisdiction.minimumAge)
             putExtra(EXTRA_REQUIRE_FACE_MATCH, requireFaceMatch)

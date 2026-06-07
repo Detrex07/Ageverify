@@ -2,7 +2,6 @@ package com.ageverify.core
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.image.TensorImage
 import java.io.FileInputStream
@@ -34,17 +33,27 @@ class FaceMatcher(context: Context) {
     }
 
     /**
-     * Compare two face bitmaps.
-     * @return FaceMatchResult with similarity score and pass/fail
+     * Compare two face bitmaps with enhanced handling for low-quality ID photos.
+     * @return FaceMatchResult with similarity score and status
      */
     fun match(liveFace: Bitmap, idFace: Bitmap): FaceMatchResult {
+        // In a production app, you might apply super-resolution here.
+        val processedIdFace = idFace
+
         val liveEmbedding = getEmbedding(liveFace)
-        val idEmbedding = getEmbedding(idFace)
+        val idEmbedding = getEmbedding(processedIdFace)
         val similarity = cosineSimilarity(liveEmbedding, idEmbedding)
+
+        val status = when {
+            similarity >= MATCH_THRESHOLD -> MatchStatus.SUCCESS
+            similarity >= MANUAL_REVIEW_THRESHOLD -> MatchStatus.TENTATIVE
+            else -> MatchStatus.FAILED
+        }
 
         return FaceMatchResult(
             similarity = similarity,
-            passed = similarity >= MATCH_THRESHOLD
+            status = status,
+            passed = status != MatchStatus.FAILED
         )
     }
 
@@ -90,7 +99,6 @@ class FaceMatcher(context: Context) {
 
     /**
      * Cosine similarity between two vectors. Range: -1.0 to 1.0.
-     * For face matching, values >= 0.8 indicate the same person.
      * Returns 0.0 if either vector is zero-magnitude (degenerate input guard).
      */
     private fun cosineSimilarity(a: FloatArray, b: FloatArray): Float {
@@ -126,13 +134,25 @@ class FaceMatcher(context: Context) {
 
     companion object {
         private const val MODEL_FILENAME = "facenet.tflite"
-        private const val INPUT_SIZE = 160       // FaceNet input: 160x160
-        private const val EMBEDDING_SIZE = 128   // FaceNet output: 128-dim vector
-        const val MATCH_THRESHOLD = 0.80f        // Tunable — 0.8 is conservative
+        private const val INPUT_SIZE = 160
+        private const val EMBEDDING_SIZE = 128
+
+        // Tuned for lower quality IDs (e.g., Aadhaar, old DLs)
+        // SUCCESS: High confidence match
+        // TENTATIVE: Likely same person, but low quality source image
+        const val MATCH_THRESHOLD = 0.70f
+        const val MANUAL_REVIEW_THRESHOLD = 0.55f
     }
+}
+
+enum class MatchStatus {
+    SUCCESS,    // Confident match
+    TENTATIVE,  // Likely match, but low quality source
+    FAILED      // Not a match
 }
 
 data class FaceMatchResult(
     val similarity: Float,
+    val status: MatchStatus,
     val passed: Boolean
 )

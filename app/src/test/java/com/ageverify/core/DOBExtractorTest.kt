@@ -170,7 +170,7 @@ class DOBExtractorTest {
             "August" to 8, "September" to 9, "October" to 10,
             "November" to 11, "December" to 12
         )
-        for ((name, num) in months) {
+        for ((name, _) in months) {
             val result = parse("01 $name 1985")
             assertWithMessage("Full month $name should parse").that(result)
                 .isInstanceOf(DOBResult.Success::class.java)

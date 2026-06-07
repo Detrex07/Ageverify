@@ -1,303 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Main / Welcome screen.
-    Two states:
-    A) Not yet verified → show steps + Start button
-    B) Already verified → show credential card + Re-verify option
--->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_bg"
+    android:background="@drawable/bg_app_gradient"
     android:fillViewport="true"
     android:scrollbars="none">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="24dp"
-        android:paddingTop="64dp"
-        android:paddingBottom="40dp">
+        android:paddingHorizontal="22dp"
+        android:paddingTop="52dp"
+        android:paddingBottom="36dp">
 
-        <!-- Wordmark / Logo row -->
         <LinearLayout
+            android:id="@+id/layoutLogo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="48dp">
-
-            <!-- Logo badge -->
-            <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/electric"
-                android:layout_marginEnd="12dp">
-                <!-- A in place of icon until vector is ready -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="A"
-                    android:textColor="@color/dark_bg"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AgeVerify"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.02" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
-
-            <!-- Version tag -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="v0.1"
-                android:textColor="@color/text_muted"
-                android:textSize="11sp"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="3dp"
-                android:background="@drawable/bg_card" />
-        </LinearLayout>
-
-        <!-- Hero text -->
-        <TextView
-            android:id="@+id/tvTagline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/main_tagline"
-            android:textColor="@color/text_primary"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:lineSpacingMultiplier="1.1"
-            android:layout_marginBottom="12dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/main_subtitle"
-            android:textColor="@color/text_secondary"
-            android:textSize="15sp"
-            android:lineSpacingMultiplier="1.4"
-            android:layout_marginBottom="40dp" />
-
-        <!-- ── ALREADY VERIFIED STATE ── (hidden by default) -->
-        <LinearLayout
-            android:id="@+id/layoutVerified"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginBottom="24dp">
-
-            <!-- Credential card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/bg_card_success"
-                android:padding="20dp"
-                android:layout_marginBottom="16dp">
-
-                <!-- Header row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Age Credential"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <!-- Verified badge -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="✓  VERIFIED"
-                        android:textColor="@color/success"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.08"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="4dp"
-                        android:background="@drawable/bg_card" />
-                </LinearLayout>
-
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/border"
-                    android:layout_marginBottom="16dp" />
-
-                <!-- Credential details grid -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Age confirmed"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="11sp"
-                            android:layout_marginBottom="2dp" />
-                        <TextView
-                            android:id="@+id/tvAgeConfirmed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="18+"
-                            android:textColor="@color/text_primary"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Jurisdiction"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="11sp"
-                            android:layout_marginBottom="2dp" />
-                        <TextView
-                            android:id="@+id/tvJurisdiction"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="—"
-                            android:textColor="@color/text_primary"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Valid until"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="11sp"
-                        android:layout_marginBottom="2dp" />
-                    <TextView
-                        android:id="@+id/tvExpiresAt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="—"
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Re-verify button -->
-            <TextView
-                android:id="@+id/btnReverify"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="@string/main_btn_reverify"
-                android:textColor="@color/text_secondary"
-                android:textSize="15sp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:background="@drawable/bg_logo_mark"
+                android:fontFamily="sans-serif-black"
                 android:gravity="center"
-                android:background="@drawable/bg_btn_secondary" />
+                android:text="AV"
+                android:textColor="@color/bg_deep_space"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="AgeVerify"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_dark_pill"
+                android:fontFamily="monospace"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="v0.1.0"
+                android:textColor="@color/text_muted"
+                android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- ── NOT VERIFIED STATE ── -->
         <LinearLayout
             android:id="@+id/layoutNotVerified"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@id/layoutLogo">
 
-            <!-- Steps card -->
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_electric_pill"
+                android:fontFamily="monospace"
+                android:letterSpacing="0.12"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
+                android:text="ON-DEVICE VERIFICATION"
+                android:textAllCaps="true"
+                android:textColor="@color/primary_electric"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvTagline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/bg_card"
-                android:padding="20dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginTop="18dp"
+                android:fontFamily="sans-serif-black"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="-4dp"
+                android:text="Age\nverified.\nPrivate."
+                android:textColor="@color/text_ghost_white"
+                android:textSize="42sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/main_steps_title"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="11sp"
-                    android:letterSpacing="0.1"
-                    android:textAllCaps="true"
-                    android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:lineSpacingMultiplier="1.45"
+                android:text="Your ID and face stay on this phone. OCR, liveness, face match, and credential signing run locally."
+                android:textColor="@color/text_steel_grey"
+                android:textSize="15sp" />
 
-                <!-- Step 1 -->
-                <include layout="@layout/item_step"
-                    android:id="@+id/step1" />
+            <LinearLayout
+                android:id="@+id/layoutStats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:orientation="horizontal">
 
-                <!-- Step 2 -->
-                <include layout="@layout/item_step"
-                    android:id="@+id/step2" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="96dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_stat_tile"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <!-- Step 3 -->
-                <include layout="@layout/item_step"
-                    android:id="@+id/step3" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="monospace"
+                        android:text="BYTES SENT"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:text="0"
+                        android:textColor="@color/primary_electric"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="96dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_stat_tile"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="monospace"
+                        android:text="STATUS"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:text="READY"
+                        android:textColor="@color/accent_mint"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- Start button -->
+            <LinearLayout
+                android:id="@+id/layoutFlow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/bg_glass_card"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvFlowTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:letterSpacing="0.1"
+                    android:text="THREE STEPS TO VERIFY"
+                    android:textColor="@color/text_muted"
+                    android:textSize="10sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="vertical">
+
+                    <include android:id="@+id/step1" layout="@layout/item_step" />
+                    <include android:id="@+id/step2" layout="@layout/item_step" />
+                    <include android:id="@+id/step3" layout="@layout/item_step" />
+                </LinearLayout>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/btnStart"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="@string/main_btn_start"
-                android:textColor="@color/dark_bg"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:layout_height="58dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/bg_btn_primary_cyber"
+                android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:background="@drawable/bg_btn_primary" />
+                android:text="Start Verification"
+                android:textColor="@color/bg_deep_space"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.3"
+                android:text="No data transmitted. No biometric storage. Credential only."
+                android:textColor="@color/text_muted"
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Privacy note — always visible -->
-        <TextView
+        <LinearLayout
+            android:id="@+id/layoutVerified"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/main_privacy_note"
-            android:textColor="@color/text_muted"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:lineSpacingMultiplier="1.5"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="34dp"
+            android:background="@drawable/bg_credential_verified"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/layoutLogo">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_electric_pill"
+                android:fontFamily="monospace"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
+                android:text="VERIFIED CREDENTIAL"
+                android:textColor="@color/success_glow"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvAgeConfirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="sans-serif-black"
+                android:text="21+"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="52sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvJurisdiction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="California, USA"
+                android:textColor="@color/text_steel_grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvExpiresAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="monospace"
+                android:text="Expires 24 May 2025"
+                android:textColor="@color/text_muted"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/btnReverify"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_btn_secondary"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Reverify"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

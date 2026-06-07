@@ -2,17 +2,16 @@ package com.ageverify.core
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Rect
 import com.ageverify.config.VerificationConfig
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.google.android.gms.tasks.Tasks
 import java.time.LocalDate
 
 /**
  * Central orchestration engine for the verification pipeline.
- *
- * Pipeline:
- * Liveness Check → ID Scan → DOB Extraction → Age Check → Face Match → Token Issue
- *
- * Each step can fail independently with a clear reason.
- * The engine is stateless — callers manage session state.
  */
 class AgeVerificationEngine(val context: Context) : AutoCloseable {
 
@@ -20,13 +19,19 @@ class AgeVerificationEngine(val context: Context) : AutoCloseable {
     private val faceMatcher  = FaceMatcher(context)
     private val tokenManager = TokenManager(context)
 
-    /**
-     * Release native resources held by TFLite interpreter and ML Kit recognizer.
-     * Call when the engine is no longer needed (e.g. ViewModel.onCleared).
-     */
+    // High-accuracy detector for the final matching step
+    private val detector = FaceDetection.getClient(
+        FaceDetectorOptions.Builder()
+            .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+            .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+            .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
+            .build()
+    )
+
     override fun close() {
         faceMatcher.close()
         dobExtractor.close()
+        detector.close()
     }
 
     /**
@@ -83,18 +88,58 @@ class AgeVerificationEngine(val context: Context) : AutoCloseable {
     }
 
     /**
-     * Step 4: Match live face against ID face crop.
+     * Step 4: Match live face against ID face crop with "Beard/Moustache" tolerance.
      */
-    fun matchFaces(liveFace: Bitmap, idFace: Bitmap): FaceMatchStepResult {
-        val result = faceMatcher.match(liveFace, idFace)
+    suspend fun matchFaces(liveFace: Bitmap, idImage: Bitmap): FaceMatchStepResult {
+        // Detect and crop face from live capture
+        val liveFaceCrop = detectAndCropFace(liveFace) ?: liveFace
+
+        // Detect and crop face from ID scan
+        val idFaceCrop = detectAndCropFace(idImage) ?: idImage
+
+        val result = faceMatcher.match(liveFaceCrop, idFaceCrop)
+
+        // Clean up temporary crops if they were created
+        if (liveFaceCrop != liveFace) liveFaceCrop.recycle()
+        if (idFaceCrop != idImage) idFaceCrop.recycle()
+
+        val statusMessage = when (result.status) {
+            MatchStatus.SUCCESS -> "Face match confirmed (${(result.similarity * 100).toInt()}%)"
+            MatchStatus.TENTATIVE -> "Match likely (${(result.similarity * 100).toInt()}%). Low quality ID or facial changes detected."
+            MatchStatus.FAILED -> "Face does not match ID photo (${(result.similarity * 100).toInt()}%). Ensure your face is clearly visible."
+        }
+
         return FaceMatchStepResult(
             similarity = result.similarity,
             passed = result.passed,
-            message = when {
-                result.passed -> "Face match confirmed (${(result.similarity * 100).toInt()}%)"
-                else -> "Face does not match ID photo (${(result.similarity * 100).toInt()}% — needs 80%)"
-            }
+            message = statusMessage
         )
+    }
+
+    private suspend fun detectAndCropFace(bitmap: Bitmap): Bitmap? {
+        val inputImage = InputImage.fromBitmap(bitmap, 0)
+        return try {
+            val faces = Tasks.await(detector.process(inputImage))
+            if (faces.isNotEmpty()) {
+                val face = faces.first()
+                val bounds = face.boundingBox
+
+                // Add padding (20%) around the face
+                val paddingX = (bounds.width() * 0.2f).toInt()
+                val paddingY = (bounds.height() * 0.2f).toInt()
+
+                val left = (bounds.left - paddingX).coerceAtLeast(0)
+                val top = (bounds.top - paddingY).coerceAtLeast(0)
+                val right = (bounds.right + paddingX).coerceAtMost(bitmap.width)
+                val bottom = (bounds.bottom + paddingY).coerceAtMost(bitmap.height)
+
+                Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            null
+        }
     }
 
     /**

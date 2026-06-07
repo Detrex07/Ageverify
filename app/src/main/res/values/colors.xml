@@ -1,30 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary_electric">#00CFFF</color>
+    <color name="primary_electric_dim">#1A00CFFF</color>
+    <color name="accent_mint">#00EF9C</color>
+    <color name="accent_mint_dim">#1A00EF9C</color>
 
-    <color name="dark_bg">#0F1115</color>
+    <color name="bg_deep_space">#07090C</color>
+    <color name="bg_space_alt">#0C0F14</color>
+    <color name="surface_glass">#131820</color>
+    <color name="surface_glass_hi">#1C2330</color>
+    <color name="surface_glass_border">#252D3A</color>
+    <color name="surface_border_hi">#2E3A4A</color>
     <color name="camera_overlay">#B3000000</color>
 
-    <color name="electric">#00BCD4</color>
-    <color name="electric_dim">#3300BCD4</color>
+    <color name="text_ghost_white">#ECF2FA</color>
+    <color name="text_steel_grey">#7D8EA3</color>
+    <color name="text_muted">#3D4A5A</color>
 
-    <color name="mint">#4CAF50</color>
-    <color name="amber">#FFC107</color>
+    <color name="success_glow">#00D48A</color>
+    <color name="error_hot_pink">#FF3D5C</color>
+    <color name="warning_amber">#FFA940</color>
 
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B3FFFFFF</color>
-    <color name="text_muted">#80FFFFFF</color>
-
-    <color name="border">#2A2D33</color>
-    <color name="surface">#1A1D22</color>
-
-    <color name="success">#4CAF50</color>
-    <color name="success_dim">#334CAF50</color>
-
-    <color name="danger">#F44336</color>
-    <color name="danger_dim">#33F44336</color>
-
+    <color name="id_guide_stroke">#00EF9C</color>
+    <color name="oval_guide_stroke">#00CFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="white_10">#1AFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
 
-    <color name="id_guide_stroke">#00BCD4</color>
-    <color name="oval_guide_stroke">#00BCD4</color>
-
+    <color name="dark_bg">@color/bg_deep_space</color>
+    <color name="electric">@color/primary_electric</color>
+    <color name="electric_dim">@color/primary_electric_dim</color>
+    <color name="mint">@color/accent_mint</color>
+    <color name="amber">@color/warning_amber</color>
+    <color name="text_primary">@color/text_ghost_white</color>
+    <color name="text_secondary">@color/text_steel_grey</color>
+    <color name="border">@color/surface_glass_border</color>
+    <color name="surface">@color/surface_glass</color>
+    <color name="success">@color/success_glow</color>
+    <color name="success_dim">#1A00D48A</color>
+    <color name="danger">@color/error_hot_pink</color>
+    <color name="danger_dim">#1AFF3D5C</color>
 </resources>

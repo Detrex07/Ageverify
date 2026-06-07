@@ -200,10 +200,3 @@ class TokenManager(context: Context) {
         }
     }
 }
-
-data class VerificationToken(
-    val jwt: String,
-    val expiresAt: Instant,
-    val jurisdiction: String,
-    val minimumAgeVerified: Int
-)

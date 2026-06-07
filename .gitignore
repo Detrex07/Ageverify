@@ -21,3 +21,5 @@ java_pid*
 .gradle-user/
 .kotlin/
 .kotlin-daemon/
+/ageverify-sdk/build
+/app/release

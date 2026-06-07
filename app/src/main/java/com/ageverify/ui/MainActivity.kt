@@ -51,14 +51,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val idScanLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            markStepDone(2)
+            // Processing/Face Match happens in background via ViewModel
+        }
+    }
+
     private val livenessLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             markStepDone(1)
-            startActivity(Intent(this, IDScanActivity::class.java))
+            idScanLauncher.launch(Intent(this, IDScanActivity::class.java))
         }
-        // If cancelled, ViewModel already updated by LivenessActivity
+    }
+
+    private val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // Success: Verification complete, return to caller app
+            finish()
+        } else {
+            // Failure/Retry: Reset UI state so user can try again
+            vm.clearSession()
+            resetSteps()
+            showNotVerifiedState()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         setupClicks()
         observeState()
 
-        // If already verified, show credential card inline — skip full flow
+        // If already verified, show credential card inline - skip full flow
         if (vm.isAlreadyVerified()) {
             showVerifiedState()
         } else {
@@ -125,14 +147,24 @@ class MainActivity : AppCompatActivity() {
             vm.pipelineState.collect { state ->
                 when (state) {
                     is PipelineState.IDPending  -> markStepDone(1)
-                    is PipelineState.Processing -> markStepDone(2)
+                    is PipelineState.Processing -> {
+                        markStepDone(1)
+                        markStepDone(2)
+                    }
                     is PipelineState.Success -> {
+                        markStepDone(1)
+                        markStepDone(2)
                         markStepDone(3)
                         navigateToResult(success = true)
                     }
                     is PipelineState.AgeFail -> navigateToResult(ageCheckFailed = true)
-                    is PipelineState.Error   -> showToast(state.message)
-                    else -> { /* Idle / LivenessPending — no UI change */ }
+                    is PipelineState.Error   -> {
+                        showToast(state.message)
+                        if (state.reason == FailureReason.FACE_MATCH_FAILED) {
+                            navigateToResult(success = false)
+                        }
+                    }
+                    else -> { /* Idle / LivenessPending - no UI change */ }
                 }
             }
         }
@@ -169,8 +201,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun markStepDone(step: Int) {
-        val check = when (step) { 1 -> step1Check; 2 -> step2Check; else -> step3Check }
-        check.visibility = View.VISIBLE
+        val check = when (step) {
+            1 -> step1Check
+            2 -> step2Check
+            3 -> step3Check
+            else -> null
+        }
+        check?.visibility = View.VISIBLE
     }
 
     private fun resetSteps() {
@@ -180,13 +217,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToResult(success: Boolean = false, ageCheckFailed: Boolean = false) {
-        startActivity(Intent(this, ResultActivity::class.java).apply {
+        resultLauncher.launch(Intent(this, ResultActivity::class.java).apply {
             putExtra("success", success)
             putExtra("age_check_failed", ageCheckFailed)
             putExtra("already_verified", false)
             putExtra("source", VerificationSessionRepository.tokenSource)
         })
-        finish()
     }
 
     private fun resolveConfig(): VerificationConfig {

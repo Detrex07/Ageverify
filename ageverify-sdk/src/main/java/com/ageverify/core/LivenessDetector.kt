@@ -5,9 +5,6 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -32,18 +29,19 @@ class LivenessDetector {
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
             .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
-            .setMinFaceSize(0.25f) // Face must occupy at least 25% of frame
+            .setMinFaceSize(0.1f) // Even more forgiving for smaller faces
             .enableTracking()
             .build()
     )
 
     /**
      * Analyse a single camera frame.
-     * Call this on each frame from the camera preview.
+     * @param bitmap The frame bitmap
+     * @param rotation The rotation degrees (from CameraX ImageInfo)
      */
-    suspend fun analyseFrame(bitmap: Bitmap): FaceFrameResult =
+    suspend fun analyseFrame(bitmap: Bitmap, rotation: Int): FaceFrameResult =
         suspendCancellableCoroutine { cont ->
-            val image = InputImage.fromBitmap(bitmap, 0)
+            val image = InputImage.fromBitmap(bitmap, rotation)
             detector.process(image)
                 .addOnSuccessListener { faces ->
                     cont.resume(interpretFaces(faces))
@@ -77,7 +75,6 @@ class LivenessDetector {
         challenge: LivenessChallenge,
         result: FaceFrameResult.FaceDetected
     ): Boolean = when (challenge) {
-
         LivenessChallenge.BLINK ->
             result.leftEyeOpenProb < BLINK_THRESHOLD &&
             result.rightEyeOpenProb < BLINK_THRESHOLD
@@ -92,8 +89,8 @@ class LivenessDetector {
             result.smilingProb > SMILE_THRESHOLD
 
         LivenessChallenge.LOOK_STRAIGHT ->
-            Math.abs(result.eulerY) < 10f &&
-            Math.abs(result.eulerX) < 10f
+            Math.abs(result.eulerY) < 15f &&
+            Math.abs(result.eulerX) < 15f
     }
 
     /**
@@ -111,9 +108,9 @@ class LivenessDetector {
     }
 
     companion object {
-        private const val BLINK_THRESHOLD = 0.2f          // Eyes < 20% open = blink
-        private const val TURN_THRESHOLD_DEGREES = 25f    // 25° = clear head turn
-        private const val SMILE_THRESHOLD = 0.8f          // 80% smile probability
+        private const val BLINK_THRESHOLD = 0.35f        // More forgiving (was 0.25)
+        private const val TURN_THRESHOLD_DEGREES = 12f   // Even easier to hit (was 20, then 15)
+        private const val SMILE_THRESHOLD = 0.6f         // Slightly easier (was 0.7)
     }
 }
 

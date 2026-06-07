@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "341946526769",
+    "project_id": "device-streaming-cc8ee902",
+    "storage_bucket": "device-streaming-cc8ee902.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341946526769:android:aba38eb6adfafe5e0f3910",
+        "android_client_info": {
+          "package_name": "com.ageverify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbydv9GnR7ENlL3_Q5eWcGEt1HWPHyfC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

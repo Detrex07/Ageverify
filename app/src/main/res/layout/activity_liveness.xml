@@ -1,185 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Liveness screen layout.
-
-    Layer order (bottom to top):
-    1. PreviewView (full screen camera feed)
-    2. Darkened overlay (top + bottom strips — oval area stays clear)
-    3. Oval guide (dashed border)
-    4. UI overlay: title, challenge text, progress, timer, tip
--->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_bg">
+    android:background="@color/bg_deep_space">
 
-    <!-- 1. Camera preview — fullscreen -->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="center" />
+        android:scaleType="centerCrop" />
 
-    <!-- 2. Dark top overlay strip -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <View
-            android:id="@+id/topOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/camera_overlay" />
-
-        <!-- Transparent window for the oval -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:background="@color/transparent" />
-
-        <View
-            android:id="@+id/bottomOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:background="@color/camera_overlay" />
-    </LinearLayout>
-
-    <!-- 3. Oval guide — centred horizontally, positioned over the clear window -->
     <View
-        android:id="@+id/ovalGuide"
-        android:layout_width="260dp"
-        android:layout_height="320dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/oval_guide" />
-
-    <!-- 4. UI Overlay — full screen, content positioned by gravity -->
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingHorizontal="24dp">
+        android:background="#66000000" />
 
-        <!-- Top bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="18dp">
+
         <LinearLayout
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="48dp"
             android:gravity="center_vertical"
-            android:paddingTop="52dp"
-            android:layout_marginBottom="12dp">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Back button -->
             <TextView
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="←"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp"
+                android:background="@drawable/bg_cam_back"
+                android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:layout_marginEnd="12dp" />
+                android:text="&lt;"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/liveness_title"
-                android:textColor="@color/text_primary"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Face Check"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="16sp" />
 
-            <!-- Progress indicator -->
             <TextView
                 android:id="@+id/tvProgress"
-                android:layout_width="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_electric_pill"
+                android:fontFamily="monospace"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
                 android:text="1/2"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp"
-                android:gravity="end" />
+                android:textColor="@color/primary_electric"
+                android:textSize="11sp" />
         </LinearLayout>
 
-        <!-- Spacer to push oval guide into view -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        <FrameLayout
+            android:id="@+id/faceFrame"
+            android:layout_width="260dp"
+            android:layout_height="326dp"
+            app:layout_constraintBottom_toTopOf="@id/challengePanel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topBar"
+            app:layout_constraintVertical_bias="0.42">
 
-        <!-- Challenge instruction panel -->
+            <View
+                android:id="@+id/pulseRing2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:alpha="0.22"
+                android:background="@drawable/oval_guide" />
+
+            <View
+                android:id="@+id/pulseRing1"
+                android:layout_width="236dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:alpha="0.45"
+                android:background="@drawable/oval_guide" />
+
+            <View
+                android:id="@+id/ovalGuide"
+                android:layout_width="220dp"
+                android:layout_height="278dp"
+                android:layout_gravity="center"
+                android:background="@drawable/oval_guide" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:alpha="0.35"
+                android:background="@color/primary_electric" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:alpha="0.35"
+                android:background="@color/primary_electric" />
+        </FrameLayout>
+
         <LinearLayout
+            android:id="@+id/challengePanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_challenge_glass"
             android:orientation="vertical"
-            android:background="@drawable/bg_card"
-            android:padding="20dp"
-            android:layout_marginBottom="24dp">
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            <!-- Status label — changes dynamically -->
             <TextView
                 android:id="@+id/tvChallengeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="POSITION YOUR FACE"
-                android:textColor="@color/text_muted"
-                android:textSize="10sp"
+                android:fontFamily="monospace"
                 android:letterSpacing="0.12"
-                android:textAllCaps="true"
-                android:layout_marginBottom="6dp" />
+                android:text="CHALLENGE"
+                android:textColor="@color/primary_electric"
+                android:textSize="10sp" />
 
-            <!-- Main instruction text -->
             <TextView
                 android:id="@+id/tvChallenge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/liveness_position"
-                android:textColor="@color/text_primary"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:lineSpacingMultiplier="1.1"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginTop="6dp"
+                android:fontFamily="sans-serif-black"
+                android:lineSpacingMultiplier="1.08"
+                android:text="Position face in frame"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <!-- Timer row -->
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_height="4dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_timer_track">
 
                 <View
                     android:id="@+id/timerProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_timer_fill" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
                     android:layout_width="0dp"
-                    android:layout_height="3dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/electric"
-                    android:layout_marginEnd="12dp" />
+                    android:fontFamily="monospace"
+                    android:text="Remaining"
+                    android:textColor="@color/text_muted"
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tvTimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
                     android:text="30s"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
+                    android:textColor="@color/text_steel_grey"
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
-
-        <!-- Tip text at the bottom -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/liveness_tip"
-            android:textColor="@color/text_muted"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:lineSpacingMultiplier="1.4"
-            android:layout_marginBottom="32dp" />
-
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

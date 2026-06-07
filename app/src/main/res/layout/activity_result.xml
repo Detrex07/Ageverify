@@ -1,215 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Result screen.
-    Three visual states controlled programmatically:
-    A) SUCCESS — green credential card, token details
-    B) AGE FAIL — red card, access denied message, no retry
-    C) ERROR — neutral card, retry button
--->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/dark_bg"
-    android:paddingHorizontal="24dp"
-    android:gravity="center_vertical">
+    android:background="@drawable/bg_app_gradient"
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <!-- Large status icon -->
-    <TextView
-        android:id="@+id/tvStatusIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="✓"
-        android:textColor="@color/success"
-        android:textSize="40sp"
-        android:gravity="center"
-        android:background="@drawable/bg_card_success"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="28dp" />
-
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvResultTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/result_success_title"
-        android:textColor="@color/text_primary"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="8dp" />
-
-    <!-- Subtitle -->
-    <TextView
-        android:id="@+id/tvResultSubtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/result_success_subtitle"
-        android:textColor="@color/text_secondary"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:lineSpacingMultiplier="1.4"
-        android:layout_marginBottom="36dp" />
-
-    <!-- Credential detail card — visible on success -->
     <LinearLayout
-        android:id="@+id/cardCredential"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:background="@drawable/bg_card"
-        android:padding="20dp"
-        android:visibility="gone"
-        android:layout_marginBottom="24dp">
+        android:paddingHorizontal="22dp"
+        android:paddingTop="76dp"
+        android:paddingBottom="36dp">
+
+        <FrameLayout
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_marginBottom="28dp">
+
+            <View
+                android:id="@+id/iconPulse"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.35"
+                android:background="@drawable/bg_card_success" />
+
+            <TextView
+                android:id="@+id/tvStatusIcon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_card_success"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="OK"
+                android:textColor="@color/success_glow"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CREDENTIAL DETAILS"
-            android:textColor="@color/text_muted"
-            android:textSize="10sp"
-            android:letterSpacing="0.12"
-            android:textAllCaps="true"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Age row -->
-        <LinearLayout
+            android:id="@+id/tvResultTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
+            android:fontFamily="sans-serif-black"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="Identity Verified"
+            android:textColor="@color/text_ghost_white"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvResultSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.45"
+            android:text="Your age credential is secured on this device. Nothing was transmitted."
+            android:textColor="@color/text_steel_grey"
+            android:textSize="14sp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardCredential"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_credential_verified"
+            android:padding="20dp"
+            android:visibility="gone">
+
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/tvCredLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/result_age_label"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
+                android:fontFamily="monospace"
+                android:letterSpacing="0.08"
+                android:text="AGE CREDENTIAL"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="11sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_electric_pill"
+                android:fontFamily="monospace"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="VERIFIED"
+                android:textColor="@color/success_glow"
+                android:textSize="9sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/credDividerTop"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/surface_glass_border"
+                app:layout_constraintTop_toBottomOf="@id/tvCredLabel" />
+
             <TextView
                 android:id="@+id/tvDetailAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-black"
                 android:text="18+"
-                android:textColor="@color/success"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textColor="@color/success_glow"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/credDividerTop" />
 
-        <!-- Jurisdiction row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/result_jurisdiction_label"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
-            <TextView
-                android:id="@+id/tvDetailJurisdiction"
+            <LinearLayout
+                android:id="@+id/detailStack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="@color/text_primary"
-                android:textSize="13sp" />
-        </LinearLayout>
+                android:gravity="end"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@id/tvDetailAge"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Expires row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+                <TextView
+                    android:id="@+id/tvDetailJurisdiction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="UNITED STATES"
+                    android:textColor="@color/text_ghost_white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvDetailExpires"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="monospace"
+                    android:text="EXP: 12 DEC 2026"
+                    android:textColor="@color/text_steel_grey"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/credDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/surface_glass_border"
+                app:layout_constraintTop_toBottomOf="@id/tvDetailAge" />
+
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/tvTokenPreview"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/result_expires_label"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
-            <TextView
-                android:id="@+id/tvDetailExpires"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="@color/text_primary"
-                android:textSize="13sp" />
-        </LinearLayout>
+                android:layout_marginTop="12dp"
+                android:ellipsize="end"
+                android:fontFamily="monospace"
+                android:singleLine="true"
+                android:text="eyJ0eXAiOiJKV1QiLCJhbGc..."
+                android:textColor="@color/primary_electric"
+                android:textSize="10sp"
+                app:layout_constraintTop_toBottomOf="@id/credDivider" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/border"
-            android:layout_marginBottom="12dp" />
-
-        <!-- JWT token preview -->
         <TextView
+            android:id="@+id/tvSourceBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SIGNED TOKEN"
-            android:textColor="@color/text_muted"
-            android:textSize="10sp"
-            android:letterSpacing="0.12"
-            android:textAllCaps="true"
-            android:layout_marginBottom="6dp" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_dark_pill"
+            android:fontFamily="monospace"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="7dp"
+            android:text="Verified in this app"
+            android:textColor="@color/text_steel_grey"
+            android:textSize="11sp"
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/tvTokenPreview"
+            android:id="@+id/btnPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_btn_primary_cyber"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Done"
+            android:textColor="@color/bg_deep_space"
+            android:textSize="16sp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="eyJ..."
-            android:textColor="@color/electric"
-            android:textSize="11sp"
-            android:fontFamily="monospace"
-            android:maxLines="2"
-            android:ellipsize="end" />
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.35"
+            android:text="No personal data stored. Only a signed credential remains on this device."
+            android:textColor="@color/text_muted"
+            android:textSize="12sp" />
     </LinearLayout>
-
-    <!-- Source badge — shows STANDALONE_APP or IN_APP -->
-    <TextView
-        android:id="@+id/tvSourceBadge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Verified via this app"
-        android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="5dp"
-        android:background="@drawable/bg_card"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone"
-        android:layout_marginBottom="32dp" />
-
-    <!-- Done / Retry button -->
-    <TextView
-        android:id="@+id/btnPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/result_done"
-        android:textColor="@color/dark_bg"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:background="@drawable/bg_btn_primary"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Privacy note -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/result_privacy_note"
-        android:textColor="@color/text_muted"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:lineSpacingMultiplier="1.5"
-        android:layout_marginTop="8dp" />
-
-</LinearLayout>
+</ScrollView>

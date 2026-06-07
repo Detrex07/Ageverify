@@ -1,0 +1,44 @@
+plugins {
+    alias(libs.plugins.android.library)
+}
+
+android {
+    compileSdk 37
+    namespace 'com.ageverify.sdk'
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+}
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.firebase.crashlytics
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
+    implementation libs.play.services.tasks
+
+    // ML Kit - Face Detection (liveness + face capture)
+    implementation libs.play.services.mlkit.face.detection
+
+    // ML Kit - Text Recognition (ID OCR)
+    implementation libs.play.services.mlkit.text.recognition
+
+    // TensorFlow Lite - FaceNet face matching
+    implementation libs.tensorflow.lite
+    implementation libs.tensorflow.lite.support
+
+    // JWT (manual signing using Android Keystore)
+    implementation libs.androidx.security.crypto
+}

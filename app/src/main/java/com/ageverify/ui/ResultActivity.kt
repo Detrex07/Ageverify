@@ -33,7 +33,7 @@ class ResultActivity : AppCompatActivity() {
         val ageCheckFailed = intent.getBooleanExtra("age_check_failed", false)
         val alreadyVerified= intent.getBooleanExtra("already_verified", false)
 
-        // Source comes from the session repository — not from Intent extras —
+        // Source comes from the session repository - not from Intent extras -
         // so it reflects the actual source even if the activity was recreated
         val source = VerificationSessionRepository.tokenSource
             .takeIf { it.isNotBlank() } ?: intent.getStringExtra("source") ?: "IN_APP"
@@ -46,7 +46,7 @@ class ResultActivity : AppCompatActivity() {
 
         setupButton(ageCheckFailed)
 
-        // Session is complete — release bitmaps immediately
+        // Session is complete - release bitmaps immediately
         // Keep the repository reference for source/metadata but clear images
         if (success || alreadyVerified || ageCheckFailed) {
             VerificationSessionRepository.currentSession?.let { session ->
@@ -70,7 +70,7 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun showSuccess(source: String) {
-        tvStatusIcon.text = "✓"
+        tvStatusIcon.text = "OK"
         tvStatusIcon.background = ContextCompat.getDrawable(this, R.drawable.bg_card_success)
         tvStatusIcon.setTextColor(ContextCompat.getColor(this, R.color.success))
         tvResultTitle.text = getString(R.string.result_success_title)
@@ -79,7 +79,7 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun showAgeFail() {
-        tvStatusIcon.text = "✕"
+        tvStatusIcon.text = "X"
         tvStatusIcon.background = ContextCompat.getDrawable(this, R.drawable.bg_card_error)
         tvStatusIcon.setTextColor(ContextCompat.getColor(this, R.color.danger))
         tvResultTitle.text = getString(R.string.result_fail_age_title)
@@ -115,20 +115,24 @@ class ResultActivity : AppCompatActivity() {
         tvDetailJurisdiction.text = token.jurisdiction
         val fmt = DateTimeFormatter.ofPattern("d MMM yyyy").withZone(ZoneId.systemDefault())
         tvDetailExpires.text = fmt.format(token.expiresAt)
-        tvTokenPreview.text = if (token.jwt.length > 40) token.jwt.take(40) + "…" else token.jwt
+        tvTokenPreview.text = if (token.jwt.length > 40) token.jwt.take(40) + "..." else token.jwt
 
         tvSourceBadge.text = when (source) {
-            "STANDALONE_APP" -> "✓  Verified via AgeVerify app"
-            else             -> "✓  Verified in this app"
+            "STANDALONE_APP" -> "OK  Verified via AgeVerify app"
+            else             -> "OK  Verified in this app"
         }
     }
 
     private fun setupButton(ageCheckFailed: Boolean) {
         btnPrimary.setOnClickListener {
             if (ageCheckFailed) {
-                // Terminal — nothing to return to
-                AppViewModelStore.clear()
-                finishAffinity()
+                // Return to MainActivity for retry
+                setResult(RESULT_CANCELED)
+                finish()
+            } else if (btnPrimary.text == getString(R.string.result_retry)) {
+                // This is the error/fail case
+                setResult(RESULT_CANCELED)
+                finish()
             } else {
                 AppViewModelStore.clear()
                 setResult(RESULT_OK)

@@ -1,196 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    ID Scan screen.
-
-    Layer order:
-    1. PreviewView — full screen, rear camera
-    2. Dark overlays — top, bottom, left, right strips (ID rectangle stays clear)
-    3. ID guide rectangle border
-    4. Corner accent marks (4 corners of the ID frame)
-    5. UI overlay — title, instruction, capture button
--->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_bg">
+    android:background="@color/bg_deep_space">
 
-    <!-- 1. Camera preview -->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewViewID"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!-- 2. Overlay strips around ID window -->
-    <!-- Top -->
-    <View
-        android:id="@+id/overlayTop"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="@color/camera_overlay"
-        android:layout_gravity="top" />
-
-    <!-- Bottom -->
-    <View
-        android:id="@+id/overlayBottom"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/camera_overlay"
-        android:layout_gravity="bottom" />
-
-    <!-- Left -->
-    <View
-        android:layout_width="20dp"
         android:layout_height="match_parent"
-        android:background="@color/camera_overlay"
-        android:layout_gravity="start" />
+        android:scaleType="centerCrop" />
 
-    <!-- Right -->
     <View
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:background="@color/camera_overlay"
-        android:layout_gravity="end" />
-
-    <!-- 3. ID guide rectangle — centred vertically, slightly above centre -->
-    <View
-        android:id="@+id/idGuide"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="120dp"
-        android:background="@drawable/id_guide" />
-
-    <!-- 4. Corner accents — each corner has a small electric line -->
-    <!-- Top-left corner -->
-    <FrameLayout
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:layout_marginEnd="316dp"
-        android:layout_marginBottom="302dp">
-        <View android:layout_width="24dp" android:layout_height="3dp"
-            android:background="@color/mint" android:layout_gravity="top" />
-        <View android:layout_width="3dp" android:layout_height="24dp"
-            android:background="@color/mint" android:layout_gravity="start" />
-    </FrameLayout>
-
-    <!-- Top-right corner -->
-    <FrameLayout
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="316dp"
-        android:layout_marginBottom="302dp">
-        <View android:layout_width="24dp" android:layout_height="3dp"
-            android:background="@color/mint" android:layout_gravity="top" />
-        <View android:layout_width="3dp" android:layout_height="24dp"
-            android:background="@color/mint" android:layout_gravity="end" />
-    </FrameLayout>
-
-    <!-- 5. UI Overlay -->
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingHorizontal="24dp">
+        android:background="#73000000" />
 
-        <!-- Top bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="18dp">
+
         <LinearLayout
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="48dp"
             android:gravity="center_vertical"
-            android:paddingTop="52dp"
-            android:layout_marginBottom="12dp">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:text="←"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp"
+                android:background="@drawable/bg_cam_back"
+                android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:layout_marginEnd="12dp" />
+                android:text="&lt;"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/id_scan_title"
-                android:textColor="@color/text_primary"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Scan ID"
+                android:textColor="@color/text_ghost_white"
+                android:textSize="16sp" />
 
-            <View android:layout_width="40dp" android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/btnFlash"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_cam_back"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:text="FL"
+                android:textColor="@color/text_steel_grey"
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Instruction -->
         <TextView
+            android:id="@+id/tvInstruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/id_scan_instruction"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
+            android:layout_marginTop="26dp"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:layout_marginBottom="8dp" />
+            android:text="Place your ID inside the frame"
+            android:textColor="@color/text_ghost_white"
+            android:textSize="17sp"
+            app:layout_constraintTop_toBottomOf="@id/topBar" />
 
-        <!-- Supported IDs note -->
         <TextView
+            android:id="@+id/tvInstructionTip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/id_scan_supported"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Any government ID with visible date of birth"
             android:textColor="@color/text_muted"
             android:textSize="12sp"
-            android:gravity="center" />
+            app:layout_constraintTop_toBottomOf="@id/tvInstruction" />
 
-        <!-- Push everything else to bottom -->
         <View
-            android:layout_width="match_parent"
+            android:id="@+id/idHole"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintBottom_toTopOf="@id/bottomPanel"
+            app:layout_constraintDimensionRatio="H,1:0.63"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInstructionTip"
+            app:layout_constraintVertical_bias="0.48" />
 
-        <!-- Processing indicator — hidden until capture pressed -->
-        <TextView
-            android:id="@+id/tvProcessing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/id_scan_processing"
-            android:textColor="@color/electric"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
+        <View
+            android:id="@+id/idGuide"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/id_guide"
+            app:layout_constraintBottom_toBottomOf="@id/idHole"
+            app:layout_constraintEnd_toEndOf="@id/idHole"
+            app:layout_constraintStart_toStartOf="@id/idHole"
+            app:layout_constraintTop_toTopOf="@id/idHole" />
 
-        <!-- Tip -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/id_scan_tip"
-            android:textColor="@color/text_muted"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
+        <View
+            android:id="@+id/viewScanLine"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@drawable/bg_timer_fill"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="@id/idGuide"
+            app:layout_constraintStart_toStartOf="@id/idGuide"
+            app:layout_constraintTop_toTopOf="@id/idGuide" />
 
-        <!-- Capture button — large circular shutter -->
-        <FrameLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="40dp">
+        <LinearLayout
+            android:id="@+id/idMockCard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:alpha="0.58"
+            android:background="@drawable/bg_glass_card"
+            android:orientation="vertical"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/idGuide"
+            app:layout_constraintEnd_toEndOf="@id/idGuide"
+            app:layout_constraintStart_toStartOf="@id/idGuide"
+            app:layout_constraintTop_toTopOf="@id/idGuide">
 
             <View
-                android:id="@+id/btnCapture"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@drawable/bg_capture_btn"
-                android:clickable="true"
-                android:focusable="true" />
-        </FrameLayout>
+                android:layout_width="64dp"
+                android:layout_height="5dp"
+                android:background="@color/white_20" />
 
-    </LinearLayout>
+            <View
+                android:layout_width="120dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/white_10" />
 
+            <View
+                android:layout_width="94dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/primary_electric_dim" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="monospace"
+                android:text="DATE OF BIRTH"
+                android:textColor="@color/primary_electric"
+                android:textSize="8sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvProcessing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_electric_pill"
+            android:fontFamily="monospace"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="6dp"
+            android:text="PROCESSING"
+            android:textColor="@color/accent_mint"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottomPanel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/bottomPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Hold steady. Avoid glare."
+                android:textColor="@color/text_steel_grey"
+                android:textSize="13sp" />
+
+            <FrameLayout
+                android:id="@+id/layoutCapture"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:layout_marginTop="18dp">
+
+                <View
+                    android:id="@+id/btnCapture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_capture_btn"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </FrameLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

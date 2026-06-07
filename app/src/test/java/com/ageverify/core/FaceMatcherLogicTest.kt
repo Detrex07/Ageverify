@@ -90,13 +90,13 @@ class FaceMatcherLogicTest {
     // ── Threshold boundary (security critical) ───────────────────────────────
 
     @Test
-    fun `similarity at exactly threshold 0_80 passes`() {
-        assertThat(meetsThreshold(0.80f)).isTrue()
+    fun `similarity at exactly threshold passes`() {
+        assertThat(meetsThreshold(FaceMatcher.MATCH_THRESHOLD)).isTrue()
     }
 
     @Test
-    fun `similarity just below threshold 0_799 fails`() {
-        assertThat(meetsThreshold(0.799f)).isFalse()
+    fun `similarity just below threshold fails`() {
+        assertThat(meetsThreshold(FaceMatcher.MATCH_THRESHOLD - 0.001f)).isFalse()
     }
 
     @Test

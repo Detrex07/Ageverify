@@ -131,15 +131,17 @@ class VerificationViewModel(
                         is StepResult.Passed -> {
                             // Step 3: Face match
                             if (config.requireFaceMatch) {
-                                val match = engine.matchFaces(liveFace, idImage)
+                                val match = withContext(Dispatchers.Default) {
+                                    engine.matchFaces(liveFace, idImage)
+                                }
                                 repo.setFaceMatchResult(match.similarity, match.passed)
 
                                 if (!match.passed) {
                                     repo.setFailure(FailureReason.FACE_MATCH_FAILED)
+                                    val pct = (match.similarity * 100).toInt()
                                     _pipelineState.value = PipelineState.Error(
                                         reason = FailureReason.FACE_MATCH_FAILED,
-                                        message = "Face does not match ID photo " +
-                                            "(${(match.similarity * 100).toInt()}% — needs 80%)"
+                                        message = "Face match failed ($pct%). Please ensure you are using your own ID and have good lighting."
                                     )
                                     return@launch
                                 }
